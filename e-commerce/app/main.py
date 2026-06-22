@@ -1,4 +1,4 @@
-from fastapi import FastAPI , HTTPException, Query,Path
+from fastapi import FastAPI , HTTPException, Query,Path, Depends
 from schema.product import Product, ProductUpdate
 from service.products import get_all_products, add_product, remove_product, change_product
 from uuid import uuid4, UUID
@@ -8,9 +8,13 @@ from datetime import datetime
 
 app = FastAPI()
 
+def common_logic():
+    print("hello world")
+    return "Hello There"
+
 @app.get('/')
 
-def root():
+def root(dep=Depends(common_logic)):
     return {"message":"welcome to fastAPI"}
 
 
@@ -97,4 +101,5 @@ def update_product(
         return update_product
     except Exception as e:
         raise HTTPException(status_code=404, detail =str(e))
+
 
